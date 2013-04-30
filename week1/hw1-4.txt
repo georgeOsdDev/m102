@@ -1,0 +1,9 @@
+use pcat
+print("1 start --------")
+db.products.find({},{name:1,_id:0}).sort({name:1})
+print("2 start --------")
+var c = db.products.find({},{name:1,_id:0}).sort({name:1}); while( c.hasNext() ) print( c.next().name);
+print("3 start --------")
+var c = db.products.find({}).sort({name:1}); c.forEach( function(doc){ print(doc.name) } );
+print("4 start --------")
+var c = db.products.find({}).sort({name:-1}); while( c.hasNext() ) print( c.next().name);
