@@ -9,6 +9,10 @@ var doc = {
 };
 
 db.products.save(doc);
+db.products.find(doc).pretty();
+print("--- updated ---")
 db.products.find({_id:ObjectId("507d95d5719dbef170f15c00")}).pretty()
 db.products.update({_id:ObjectId("507d95d5719dbef170f15c00")},{$set:{'term_years':3}})
 db.products.update({_id:ObjectId("507d95d5719dbef170f15c00")},{$set:{'limits.sms.over_rate':0.01}})
+print("--- updated ---")
+db.products.find({_id:ObjectId("507d95d5719dbef170f15c00")}).pretty()

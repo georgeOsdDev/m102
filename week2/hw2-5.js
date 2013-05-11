@@ -1,0 +1,5 @@
+db.products.find({for:"ac3"})
+db.products.update({for:"ac3"},{$inc:{price:2}},true,true)
+print("--- updated ---")
+db.getLastErrorObj()
+db.products.find({for:"ac3"})

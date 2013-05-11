@@ -1,2 +1,2 @@
 #/usr/bin sh
-mongo --shell pcat hw2-2.js
+mongo --shell pcat < hw2-2.js
