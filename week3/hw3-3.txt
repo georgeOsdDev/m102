@@ -1,0 +1,44 @@
+use week3
+print ("--- -query 1--")
+db.policies.find({
+  status : { $ne : "expired" },
+  coverages : {
+    $elemMatch : {
+      type : "liability",
+      rates : {
+        $elemMatch : {
+          rate : { $gte : 100 },
+          current : true
+        }
+      }
+    }
+  }
+})
+
+print ("--- -query 2--")
+db.policies.find({
+  status : { $ne : "expired" },
+  coverages : {
+    $elemMatch : {
+      type : "liability",
+      rates : {
+        rate : {$gte : 100 },
+        current : true
+      }
+    }
+  }
+})
+
+print ("--- -query 3--")
+db.policies.find({
+  status : { $ne : "expired" },
+  coverages : {
+    type : "liability",
+    rates : {
+      $elemMatch : {
+        rate : { $gte : 100 },
+        current : true
+      }
+    }
+  }
+})

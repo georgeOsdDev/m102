@@ -1,0 +1,78 @@
+use week3
+db.zips.aggregate(
+  [
+    { $project : { _id : { $substr : ["$_id",0,1] } } } ,
+    { $group : { _id : "$_id", n : {$sum:1} } }
+  ]
+)
+
+print("--- start with Alphabet ---")
+db.zips.aggregate([
+  { $project :
+    {
+      _id : "$_id",
+      cityChar : { $substr : ["$city",0,1] }
+    }
+  },
+  {$match:{
+    cityChar:{$nin:["0","1","2","3","4","5","6","7","8","9"]}
+    }
+  },
+  {$group:
+    {_id:"$cityChar", n : {$sum:1} }
+  }
+])
+db.zips.aggregate([
+  { $project :
+    {
+      _id : "$_id",
+      cityChar : { $substr : ["$city",0,1] }
+    }
+  },
+  {$match:{
+    cityChar:{$nin:["0","1","2","3","4","5","6","7","8","9"]}
+    }
+  },
+  {$group:
+    {_id:null, n : {$sum:1} }
+  }
+])
+
+print("--- start with Number ---")
+db.zips.aggregate([
+  { $project :
+    {
+      _id : "$_id",
+      cityChar : { $substr : ["$city",0,1] }
+    }
+  },
+  {$match:{
+    cityChar:{$in:["0","1","2","3","4","5","6","7","8","9"]}
+    }
+  },
+  {$group:
+    {_id:"$cityChar", n : {$sum:1} }
+  }
+])
+db.zips.aggregate([
+  { $project :
+    {
+      _id : "$_id",
+      cityChar : { $substr : ["$city",0,1] }
+    }
+  },
+  {$match:{
+    cityChar:{$in:["0","1","2","3","4","5","6","7","8","9"]}
+    }
+  },
+  {$group:
+    {_id:null, n : {$sum:1} }
+  }
+])
+print("--- all ---")
+db.zips.count()
+
+print("--- exec query ---")
+db.zips.count({"city":{$regex:"[1-9].*"}})
+db.zips.remove({"city":{$regex:"[1-9].*"}})
+db.zips.count()
