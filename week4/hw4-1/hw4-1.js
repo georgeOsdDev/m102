@@ -1,0 +1,2 @@
+homework.init()
+homework.a()
