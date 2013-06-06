@@ -1,0 +1,39 @@
+#restore environment
+killall mongod
+killall mongos
+rm -rf ./data
+rm -rf ./log
+mkdir -p data/db data/configdb log
+
+#start mongod
+mongod --dbpath ./data/db --port 27001 --smallfiles --oplogSize 50 --logpath "log/1.log" --fork
+
+#initiate for homework
+mongo --port 27001 --shell localhost/week6 week6.js
+db.trades.drop()
+homework.init()
+db.trades.stats()
+[C+c]
+
+#stop mongod
+killall mongod
+
+#start shardsrv
+mongod --shardsvr --dbpath ./data/db --port 27018 --smallfiles --logappend
+
+#start configsrv
+mongod --configsvr --dbpath ./data/configdb --smallfiles --logappend
+
+#start mongos
+mongos --configdb localhost:27019
+
+#connect mongos
+mongo --shell localhost/week6 week6.js
+sh.addShard("a/localhost:27018")
+
+
+db.trades.find().pretty()
+db.trades.count()
+db.trades.stats()
+
+homework.a()
