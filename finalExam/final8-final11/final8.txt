@@ -1,0 +1,8 @@
+mkdir -p data/configsrv
+mongod --configsvr --dbpath ./data/configsrv --smallfiles --logappend
+mongorestore --port 27019 config_server
+
+####
+mongo localhost:27019/config
+db
+db.chunks.find().sort({_id:1}).next().lastmodEpoch.getTimestamp().toString().substr(19,5)

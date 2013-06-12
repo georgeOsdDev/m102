@@ -1,0 +1,24 @@
+rm -rf data/s1 data/s2
+mkdir -p data/s1 data/s2
+mongod --dbpath ./data/s1 --port 27501 --smallfiles --logappend --fork
+mongorestore --port 27501 s1 --oplogReplay
+mongod --dbpath ./data/s2 --port 27601 --smallfiles --logappend --fork
+mongorestore --port 27601 s2 --oplogReplay
+
+###
+mongo localhost:27019/config
+db.shards.find()
+#update shards config
+db.shards.update({"_id":"s1"},{ "_id" : "s1", "host" : "localhost:27501" })
+db.shards.update({"_id":"s2"},{ "_id" : "s2", "host" : "localhost:27601" })
+db.shards.find()
+
+sh.stopBalancer()
+
+###
+mongos --configdb localhost:27019 --upgrade
+
+###
+mongo
+use snps
+db.elegans.aggregate([{$match:{N2:"T"}},{$group:{_id:"$N2",n:{$sum:1}}}]).result[0].n

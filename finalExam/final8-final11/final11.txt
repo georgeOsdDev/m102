@@ -1,0 +1,18 @@
+mongoimport -d snps -c problem11 problem11.json
+
+# how many unique N2/mutant pairs are there in this collection?
+mongos
+use snps
+db.problem11.findOne()
+# > { "_id" : "CE1-123", "N2" : "a", "mutant" : "g", "strain" : "CB4856" }
+
+var docs = db.problem11.aggregate([
+  { $project : { _id : "$_id",
+                  N2 : "$N2",
+                  mutant : "$mutant",
+                  unique:{$concat:["$N2","$mutant"]}
+               }
+  },
+  { $group :{_id : "$unique", n : {$sum:1} }},
+])
+print(docs.result.length

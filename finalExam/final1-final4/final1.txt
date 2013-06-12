@@ -1,0 +1,20 @@
+chmod +x a.sh
+sh a.sh
+
+mongo --shell --port 27003 a.js
+
+ourinit()
+testRollback()
+
+
+
+####
+ps -A | grep mongod
+mongod --fork --logpath a.log --smallfiles --oplogSize 50 --port 27001 --dbpath data/z1 --replSet z
+mongod --fork --logpath b.log --smallfiles --oplogSize 50 --port 27002 --dbpath data/z2 --replSet z
+ps -A | grep mongod
+
+####
+mongo port --27001
+rs.status()
+db.foo.find()

@@ -1,0 +1,20 @@
+mongo --shell --port 27003 a.js
+
+testRollback()
+
+
+####
+ps -A | grep mongod
+killall mongod
+ps -A | grep mongod
+mongod --fork --logpath a.log --smallfiles --oplogSize 50 --port 27001 --dbpath data/z1 --replSet z
+mongod --fork --logpath b.log --smallfiles --oplogSize 50 --port 27002 --dbpath data/z2 --replSet z
+mongo --port 27001
+rs.status()
+db.foo.find()
+db.foo.insert({_id:"last"})
+db.getLastErrorObj(2)
+
+
+####
+mongod --fork --logpath c.log --smallfiles --oplogSize 50 --port 27003 --dbpath data/z3 --replSet z

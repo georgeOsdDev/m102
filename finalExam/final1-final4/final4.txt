@@ -1,0 +1,13 @@
+#Reconfigure the replica set so that the third member can never be primary.
+mongo --port 27001
+cfg = rs.conf()
+cfg.members[0].priority = 1
+cfg.members[1].priority = 2
+cfg.members[2].priority = 0
+cfg.members[2].slaveDelay = 60
+rs.reconfig(cfg)
+
+
+####
+mongo --shell a.js --port 27003
+part4()
